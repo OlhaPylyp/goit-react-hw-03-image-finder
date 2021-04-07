@@ -1,9 +1,11 @@
 import { Component } from 'react';
 import Modal from './Components/Modals';
-import axios from 'axios';
+import Loader from "react-loader-spinner";
+
 import ImageGallery from './Components/ImageGallery';
 import ImageGalleryItem from './Components/ImageGalleryItem';
 import Button from './Components/Button';
+import imageApi from './Components/Api/ImageA-Api';
 
 import SearchBar from './Components/SearchBar';
 import styles from './Components/Modals/Modal.module.css';
@@ -14,6 +16,7 @@ class App extends Component {
     images: [],
     currentPage: 1,
     searchImage: '',
+    isLoading:false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -23,46 +26,55 @@ class App extends Component {
   }
 
   addImage = image => {
-    // this.setState({ isLoading: true });
+  
     this.setState({ searchImage: image, images: [], currentPage: 1 });
   };
-  fetchImage = async () => {
+  fetchImage =  () => {
     const { searchImage, currentPage } = this.state;
-    try {
-      axios
-        .get(
-          `https://pixabay.com/api/?q=${searchImage}&page=${currentPage}&key=20342526-89d38198e8299a53d4950dffe&image_type=photo&orientation=horizontal&per_page=12`,
-        )
-        .then(response =>
-          this.setState(prevState => ({
-            images:[prevState.images,...response.data.hits] ,
-            currentPage: prevState.currentPage + 1,
-          })),
-        );
-    } catch (e) {
-      console.log(`Axios request failed: ${e}`);
-    }
-  };
+    const options = { searchImage, currentPage };
+      this.setState({ isLoading: true });
+    // try {
+      imageApi.fetchImages(options).then(hits =>
+        this.setState(prevState => ({
+          images: [...prevState.images, ...hits],
+          currentPage: prevState.currentPage + 1,
+        })),
+      ).finally (()=>this.setState({ isLoading:false })) ;
+    // } catch (e) {
+    //   console.log(`Axios request failed: ${e}`);
+    // }
+  //   
+   };
   toogleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
   render() {
-    const { showModal, images } = this.state;
+    const { showModal, images, isLoading} = this.state;
 
     return (
       <div>
         {' '}
         <SearchBar onSubmit={this.addImage} />
+        {isLoading&& (<Loader className ={styles.loader}
+        type="Oval"
+        color="darkblue"
+        height={60}
+        width={60}
+        timeout={3000} 
+      />)}
         <ImageGallery images={images} />
-        <button
-          className={styles.button}
-          type="button"
-          onClick={this.fetchImage}
-        >
-          {' '}
-          LoadMore
-        </button>
+        {images.length > 0 && (
+          <button
+            className={styles.button}
+            type="button"
+            onClick={this.fetchImage}
+          >
+            {' '}
+            LoadMore
+          </button>
+        )}
+      
         {/* <Button onClick={this.fetchImage}/>  */}
         {showModal && (
           <Modal Close={this.toogleModal}>
