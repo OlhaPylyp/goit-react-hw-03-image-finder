@@ -1,29 +1,39 @@
 import { Component } from 'react';
+import Modal from './Components/Modals';
+import SearchBar from './Components/SearchBar'
+import styles from './Components/Modals/Modal.module.css'
 
 class App extends Component {
-  static defaultProps = {
-    initialValue: 0,
-  };
   state = {
-    good: this.props.initialValue,
-    neutral: this.props.initialValue,
-    bad: this.props.initialValue,
+    showModal: true,
   };
 
-
-
+  toogleModal = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
 
   render() {
-    const { good } = this.state;
+    const { showModal } = this.state;
   
 
     return (
- 
-       
-        <div>
-         
-        </div>
-   
+      <div>
+      
+          <button  className={styles.button} type="button" onClick={this.toogleModal}>
+      {' '}
+      Open
+    </button>
+        {showModal && (
+          <Modal onClose={this.toogleModal}> 
+            <SearchBar/>
+            <p>Lorem jkhkjfdkjjkjfkjgkgfda</p>
+            <button  className={styles.button} type="button" onClick={this.toogleModal}>
+              {' '}
+              Close
+            </button>
+          </Modal>
+        )}
+      </div>
     );
   }
 }
