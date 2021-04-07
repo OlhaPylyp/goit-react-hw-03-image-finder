@@ -1,1 +1,1 @@
-export {default} from "../Modals/SearchBar"
+export {default} from "./SearchBar"
