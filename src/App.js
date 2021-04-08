@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import Modal from './Components/Modals';
-import Loader from "react-loader-spinner";
+// import Loader from "react-loader-spinner";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import ImageGallery from './Components/ImageGallery';
 import ImageGalleryItem from './Components/ImageGalleryItem';
@@ -20,10 +21,11 @@ class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+  
     if (prevState.searchImage !== this.state.searchImage) {
-      this.fetchImage();
+      this.fetchImage();      
     }
-  }
+    }
 
   addImage = image => {
   
@@ -56,14 +58,17 @@ class App extends Component {
       <div>
         {' '}
         <SearchBar onSubmit={this.addImage} />
-        {isLoading&& (<Loader className ={styles.loader}
-        type="Oval"
-        color="darkblue"
-        height={60}
-        width={60}
-        timeout={3000} 
-      />)}
+       
         <ImageGallery images={images} />
+        {isLoading&& (<LinearProgress color='secondary' />
+      //   <Loader className ={styles.loader}
+      //   type="Oval"
+      //   color="#03061d"
+      //   height={60}
+      //   width={60}
+      //   timeout={3000} 
+      // />
+      )}
         {images.length > 0 && (
           <button
             className={styles.button}
@@ -79,7 +84,7 @@ class App extends Component {
         {showModal && (
           <Modal Close={this.toogleModal}>
             {' '}
-            <ImageGalleryItem src={images} onClick={this.toogleModal} />
+            <ImageGallery src={images} onClick={this.toogleModal} />
           </Modal>
         )}
       </div>
