@@ -1,14 +1,15 @@
 import style from '../ImageGallery/ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem';
 
-const ImageGallery = ({ images }) => (
+const ImageGallery = ({ images, onClick  }) => (
   <ul className={style.imageGallery}>
-    {images.map(({ id, webformatURL, largeImageURL }) => {
+    {images.map(({ id, webformatURL, largeImageURL}) => {
       return (
         <ImageGalleryItem
           id={id}
           webformatURL={webformatURL}
-          largeImageURL={largeImageURL}
+          modalSrc={largeImageURL}
+          onClick={onClick}
         />
       );
     })}
