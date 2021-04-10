@@ -39,7 +39,7 @@ class App extends Component {
     const options = { searchImage, currentPage };
     this.setState({ isLoading: true });
     this.setState({ scrollScr: true });
-    if (searchImage.length <=2) {
+    if (searchImage.length <= 2) {
       return;
     }
     this.setState({ enterError: true });

@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import styles from '../SearchBar/Searchbar.module.css';
 
-
 class SearchBar extends Component {
   state = {
     image: '',
