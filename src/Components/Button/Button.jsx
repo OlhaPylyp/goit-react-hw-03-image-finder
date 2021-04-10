@@ -1,23 +1,12 @@
+import style from '../Button/Button.module.css';
+const Button = ({ onClick }) => {
+  return (
+    <div className={style.container}>
+    <button className={style.button} type="button" onClick={onClick}>
+      {' '}
+      LoadMore
+    </button></div>
+  );
+};
 
-
-import { Component } from 'react';
-import style from "../Button/Button.module.css"
-class  Button extends Component { 
-    
-    // window.scrollTo({
-    //     top: document.documentElement.scrollHeight,
-    //     behavior: 'smooth',
-    //   });
-    
-    render(){
-    return(<button
-    className={style.button}
-    type="button"
-    // onclick={onClick}
-      >
-    {' '}
- LoadMore
-  </button>)}
-      }
-  
-  export default Button
+export default Button;

@@ -2,6 +2,7 @@ import style from '../ImageGallery/ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem';
 
 const ImageGallery = ({ images, onClick  }) => (
+<div className ={style.grid}>
   <ul className={style.imageGallery}>
     {images.map(({ id, webformatURL, largeImageURL}) => {
       return (
@@ -13,6 +14,6 @@ const ImageGallery = ({ images, onClick  }) => (
         />
       );
     })}
-  </ul>
+  </ul></div>
 );
 export default ImageGallery;

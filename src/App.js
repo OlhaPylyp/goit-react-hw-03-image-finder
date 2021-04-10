@@ -5,7 +5,6 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { Notification } from 'react-pnotify';
 
 import ImageGallery from './Components/ImageGallery';
-import ImageGalleryItem from './Components/ImageGalleryItem';
 import Button from './Components/Button';
 import imageApi from './Components/Api/ImageA-Api';
 
@@ -20,7 +19,8 @@ class App extends Component {
     searchImage: '',
     isLoading: false,
     error: null,
-    modalURL:'',
+    modalURL: '',
+    scrollScr: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -36,9 +36,11 @@ class App extends Component {
     const { searchImage, currentPage } = this.state;
     const options = { searchImage, currentPage };
     this.setState({ isLoading: true });
-    // if (!searchImage) {
-    //   return;
-    // }
+    this.setState({ scrollScr: true });
+    if (!searchImage) {
+      // this.setState({error:error})
+      return;
+    }
 
     // try {
     imageApi
@@ -49,32 +51,39 @@ class App extends Component {
           currentPage: prevState.currentPage + 1,
         })),
       )
-      .catch(error => this.setState({ error }))
+      .catch(error => this.setState({ error:true }))
       .finally(() => this.setState({ isLoading: false }));
     // } catch (e) {
     //   console.log(`Axios request failed: ${e}`);
     // }
     //
   };
- 
-  toogleModal = () => {   
-       this.setState(({ showModal }) => ({ showModal: !showModal }));
+
+  toogleModal = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
- getModalImage=(largeImageURL) =>{
-   console.log("largeImageURL",largeImageURL)
-    this.setState({modalURL:largeImageURL.modalSrc})
-    console.log("modalURL", this.state.modalURL)
-    this.toogleModal()
-    }
+  getModalImage = largeImageURL => {
+    console.log('largeImageURL', largeImageURL);
+    this.setState({ modalURL: largeImageURL.modalSrc });
+    console.log('modalURL', this.state.modalURL);
+    this.toogleModal();
+  };
 
   render() {
-    const { showModal, images, isLoading, error, modalURL} = this.state;
+    const {
+      showModal,
+      images,
+      isLoading,
+      error,
+      modalURL,
+      scrollScr,
+    } = this.state;
 
     return (
       <div>
         {' '}
         <SearchBar onSubmit={this.addImage} />
-        <ImageGallery images={images} onClick={this.getModalImage }/>
+        <ImageGallery images={images} onClick={this.getModalImage} />
         {error && (
           <p>
             Whoops, something went wrong:{' '}
@@ -102,22 +111,19 @@ class App extends Component {
           //   timeout={3000}
           // />
         )}
-        {images.length > 0 && (
-          <button
-            className={styles.button}
-            type="button"
-            onClick={this.fetchImage}
-          >
-            {' '}
-            LoadMore
-          </button>
-        )}
+        {images.length > 0 && <Button onClick={this.fetchImage} />}
+        {(images.length > 0) && scrollScr &&
+          window.scrollTo({
+            top: document.documentElement.scrollTop + document.documentElement.clientHeight,
+            behavior: 'smooth',
+          })}
         {/* <Button onClick={this.fetchImage}/>  */}
-        {showModal &&
-         <Modal  onClick={this.toogleModal} onClose={this.toogleModal}>
-        {/* <ImageGalleryItem modalSrc={modalURL} onClick={this.toogleModal }/> */}
-       <img width="1200" height="900" src={modalURL} alt="something" /> 
-          </Modal>}
+        {showModal && (
+          <Modal onClick={this.toogleModal} onClose={this.toogleModal}>
+            {/* <ImageGalleryItem modalSrc={modalURL} onClick={this.toogleModal }/> */}
+            <img width="1200" height="900" src={modalURL} alt="something" />
+          </Modal>
+        )}
       </div>
     );
   }
