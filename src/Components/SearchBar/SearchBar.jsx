@@ -1,22 +1,21 @@
 import { Component } from 'react';
 import styles from '../SearchBar/Searchbar.module.css';
-import axios from 'axios';
+
 
 class SearchBar extends Component {
-  state={
-    image:"",
-  }
+  state = {
+    image: '',
+  };
 
-  handleChange=(e)=>{
-    this.setState({image: e.currentTarget.value})
-  }
-  handleSubmit=  (e)=>{
+  handleChange = e => {
+    this.setState({ image: e.currentTarget.value });
+  };
+  handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state.image)
-    this.setState({image: ""})
-    console.log(this.state.image)
-
-  }
+    this.props.onSubmit(this.state.image);
+    this.setState({ image: '' });
+    console.log(this.state.image);
+  };
   render() {
     return (
       <div>
@@ -30,7 +29,7 @@ class SearchBar extends Component {
               onChange={this.handleChange}
               className={styles.searchForm_input}
               type="text"
-              autocomplete="off"
+              autoComplete="off"
               autoFocus
               placeholder="Search images and photos"
               value={this.state.image}

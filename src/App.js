@@ -9,7 +9,7 @@ import Button from './Components/Button';
 import imageApi from './Components/Api/ImageA-Api';
 
 import SearchBar from './Components/SearchBar';
-import styles from './Components/Modals/Modal.module.css';
+// import styles from './Components/Modals/Modal.module.css';
 
 class App extends Component {
   state = {
@@ -38,7 +38,7 @@ class App extends Component {
     this.setState({ isLoading: true });
     this.setState({ scrollScr: true });
     if (!searchImage) {
-      // this.setState({error:error})
+    this.setState({error:true})
       return;
     }
 
@@ -51,7 +51,7 @@ class App extends Component {
           currentPage: prevState.currentPage + 1,
         })),
       )
-      .catch(error => this.setState({ error:true }))
+      .catch(error=>this.setState({ error:true }))
       .finally(() => this.setState({ isLoading: false }));
     // } catch (e) {
     //   console.log(`Axios request failed: ${e}`);
@@ -89,8 +89,8 @@ class App extends Component {
             Whoops, something went wrong:{' '}
             <Notification
               type="error"
-              title="Error example"
-              text="Please write correct querly"
+              title="Error"
+              text="Please write some querly"
               animateIn="bounceInLeft"
               animateOut="bounceOutRight"
               delay={2500}
