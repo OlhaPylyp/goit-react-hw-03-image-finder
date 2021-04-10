@@ -15,6 +15,6 @@ ImageGalleryItem.propTypes = {
   onClick: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   webformatURL: PropTypes.string.isRequired,
-  largeImageURL: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string,
 };
 export default ImageGalleryItem;
