@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import Modal from './Components/Modals';
 // import Loader from "react-loader-spinner";
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -10,6 +10,11 @@ import SearchBar from './Components/SearchBar';
 // import styles from './Components/Modals/Modal.module.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.listRef = React.createRef();
+  }
+
   state = {
     showModal: false,
     images: [],
@@ -21,23 +26,65 @@ class App extends Component {
     scrollScr: false,
     enterError: false,
   };
+  // Пример прокрутки взят из документации https://ru.reactjs.org/docs/react-component.html#getsnapshotbeforeupdate
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    if (prevState.images.length < this.state.images.length) {
+      const list = this.listRef.current;
+      // console.log("set snapshot: ", list.scrollHeight, list.scrollTop)
+      return list.scrollHeight - list.scrollTop;
+    }
+    return null;
+  }
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log('componentDidUpdate');
+  componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevState.searchImage !== this.state.searchImage) {
+      console.log('call fetchImage()');
       this.fetchImage();
+    }
+
+    if (snapshot !== null) {
+      const list = this.listRef.current;
+      console.log('snapshot: ', list.scrollHeight, snapshot);
+      if (this.state.scrollScr) {
+        window.scrollTo({
+          top:
+            document.documentElement.scrollTop + (list.scrollHeight - snapshot),
+          behavior: 'smooth',
+        });
+      } else {
+        this.setState({ scrollScr: true });
+      }
     }
   }
 
   addImage = image => {
+    // console.log('addImage()');
     this.setState({ searchImage: image, images: [], currentPage: 1 });
   };
 
+  checkScroll = () => {
+    // console.log('checkScroll() searchImage', this.state.searchImage);
+    if (this.state.scrollScr) {
+      console.log('lets scroll');
+
+      window.scrollTo({
+        top:
+          document.documentElement.scrollTop +
+          document.documentElement.clientHeight,
+        behavior: 'smooth',
+      });
+    }
+    this.state.searchImage.length > 0
+      ? this.setState({ scrollScr: true })
+      : console.log('2');
+  };
+
   fetchImage = () => {
+    console.log('fetchImage()');
     const { searchImage, currentPage } = this.state;
     const options = { searchImage, currentPage };
     this.setState({ isLoading: true });
-    this.setState({ scrollScr: true });
+
     if (searchImage.length <= 2) {
       this.setState({ isLoading: false });
       return;
@@ -57,13 +104,13 @@ class App extends Component {
   };
 
   toogleModal = () => {
+    console.log('toogleModal()');
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
   getModalImage = largeImageURL => {
-    console.log('largeImageURL', largeImageURL);
-    this.setState({ modalURL: largeImageURL.modalSrc });
     console.log('modalURL', this.state.modalURL);
+    this.setState({ modalURL: largeImageURL.modalSrc });
     this.toogleModal();
   };
 
@@ -74,12 +121,11 @@ class App extends Component {
       isLoading,
       // enterError,
       modalURL,
-      scrollScr,
       error,
     } = this.state;
-
+    console.log('render() searchImage', this.state.searchImage);
     return (
-      <div>
+      <div ref={this.listRef}>
         {' '}
         <SearchBar onSubmit={this.addImage} />
         <ImageGallery images={images} onClick={this.getModalImage} />
@@ -108,14 +154,6 @@ class App extends Component {
           // />
         )}
         {images.length > 0 && <Button onClick={this.fetchImage} />}
-        {images.length > 0 &&
-          scrollScr &&
-          window.scrollTo({
-            top:
-              document.documentElement.scrollTop +
-              document.documentElement.clientHeight,
-            behavior: 'smooth',
-          })}
         {showModal && (
           <Modal onClick={this.toogleModal} onClose={this.toogleModal}>
             <img width="1200" height="900" src={modalURL} alt="something" />
