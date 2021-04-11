@@ -39,9 +39,10 @@ class App extends Component {
     this.setState({ isLoading: true });
     this.setState({ scrollScr: true });
     if (searchImage.length <= 2) {
+      this.setState({ isLoading: false });
       return;
     }
-    this.setState({ enterError: true });
+    // this.setState({ enterError: true });
 
     imageApi
       .fetchImages(options)
