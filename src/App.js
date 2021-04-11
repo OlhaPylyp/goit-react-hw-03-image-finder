@@ -66,7 +66,6 @@ class App extends Component {
     // console.log('checkScroll() searchImage', this.state.searchImage);
     if (this.state.scrollScr) {
       console.log('lets scroll');
-
       window.scrollTo({
         top:
           document.documentElement.scrollTop +
@@ -89,8 +88,6 @@ class App extends Component {
       this.setState({ isLoading: false });
       return;
     }
-    // this.setState({ enterError: true });
-
     imageApi
       .fetchImages(options)
       .then(hits =>
