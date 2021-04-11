@@ -59,24 +59,29 @@ class App extends Component {
 
   addImage = image => {
     // console.log('addImage()');
-    this.setState({ searchImage: image, images: [], currentPage: 1 });
+    this.setState({
+      searchImage: image,
+      images: [],
+      currentPage: 1,
+      scrollScr: false,
+    });
   };
 
-  checkScroll = () => {
-    // console.log('checkScroll() searchImage', this.state.searchImage);
-    if (this.state.scrollScr) {
-      console.log('lets scroll');
-      window.scrollTo({
-        top:
-          document.documentElement.scrollTop +
-          document.documentElement.clientHeight,
-        behavior: 'smooth',
-      });
-    }
-    this.state.searchImage.length > 0
-      ? this.setState({ scrollScr: true })
-      : console.log('2');
-  };
+  // checkScroll = () => {
+  //   // console.log('checkScroll() searchImage', this.state.searchImage);
+  //   if (this.state.scrollScr) {
+  //     console.log('lets scroll');
+  //     window.scrollTo({
+  //       top:
+  //         document.documentElement.scrollTop +
+  //         document.documentElement.clientHeight,
+  //       behavior: 'smooth',
+  //     });
+  //   }
+  //   this.state.searchImage.length > 0
+  //     ? this.setState({ scrollScr: true })
+  //     : console.log('2');
+  // };
 
   fetchImage = () => {
     console.log('fetchImage()');
@@ -142,13 +147,13 @@ class App extends Component {
         )}
         {isLoading && (
           <LinearProgress color="secondary" />
-          //   <Loader className ={styles.loader}
-          //   type="Oval"
-          //   color="#03061d"
+          //     <Loader className ={styles.loader}
+          //     type="Oval"
+          //    color="#03061d"
           //   height={60}
-          //   width={60}
-          //   timeout={3000}
-          // />
+          //  width={60}
+          //    timeout={3000}
+          //  />
         )}
         {images.length > 0 && <Button onClick={this.fetchImage} />}
         {showModal && (
