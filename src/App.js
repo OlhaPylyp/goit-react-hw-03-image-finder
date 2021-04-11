@@ -24,7 +24,6 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     console.log('componentDidUpdate');
-
     if (prevState.searchImage !== this.state.searchImage) {
       this.fetchImage();
     }
@@ -43,7 +42,7 @@ class App extends Component {
       return;
     }
     this.setState({ enterError: true });
-    // try {
+
     imageApi
       .fetchImages(options)
       .then(hits =>
@@ -59,6 +58,7 @@ class App extends Component {
   toogleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
+
   getModalImage = largeImageURL => {
     console.log('largeImageURL', largeImageURL);
     this.setState({ modalURL: largeImageURL.modalSrc });
